@@ -1,0 +1,6 @@
+integers:
+  integer3: 3
+doubles:
+  double34: 3.4
+strings:
+  stringabc: "abc"

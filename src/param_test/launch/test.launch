@@ -1,0 +1,12 @@
+<launch>
+  <param name="integer8" value="8" />
+  <param name="double8" value="8" />
+  <param name="string8" value="eight" />
+  <!--node pkg="param_test" type="setparam" name="setparam" /-->
+  <node pkg="param_test" type="getparam" name="getparam" output="screen">
+    <param name="integer9" value="9" />
+    <param name="double9" value="9" />
+    <param name="string9" value="nine" />
+    <rosparam command="load" file="$(find param_test)/config/param.yaml" />
+  </node>
+</launch>
