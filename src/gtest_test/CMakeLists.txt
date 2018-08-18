@@ -14,9 +14,17 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(libcalculator src/calculator.cc)
+file(GLOB_RECURSE ALL_SRCS "*.cc")
+file(GLOB_RECURSE ALL_TESTS "*_test.cc")
+list(REMOVE_ITEM ALL_SRCS ${ALL_TESTS})
+
+add_library(${PROJECT_NAME} ${ALL_SRCS})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
 if (CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(calculator_test src/calculator_test.cc)
-  target_link_libraries(calculator_test ${catkin_LIBRARIES} libcalculator)
+  foreach(FILE_PATH ${ALL_TESTS})
+    get_filename_component(FILENAME ${FILE_PATH} NAME_WE)
+    catkin_add_gtest(${FILENAME} ${FILE_PATH})
+    target_link_libraries(${FILENAME} ${catkin_LIBRARIES} ${PROJECT_NAME})
+  endforeach(FILE_PATH)
 endif()
