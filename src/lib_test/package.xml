@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>gtest_test</name>
+  <name>lib_test</name>
   <version>0.0.0</version>
-  <description>The gtest_test package</description>
+  <description>The lib_test package</description>
 
   <maintainer email="ee904@todo.todo">ee904</maintainer>
   <license>TODO</license>
