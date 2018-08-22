@@ -1,0 +1,8 @@
+/** \mainpage
+ * \author HuaTsai
+ *
+ * @b lib_test is mainly for learning to use library, it can
+ * - help me specialized in ros
+ * - learn how libraries work and pass to another package
+ * - as you know, I am writing doxygen, and it's very powerful
+ */

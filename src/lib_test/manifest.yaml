@@ -1,0 +1,15 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- catkin
+- roscpp
+description: The lib_test package
+license: TODO
+maintainers: ee904 <ee904@todo.todo>
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

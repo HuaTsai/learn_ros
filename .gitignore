@@ -22,7 +22,6 @@ devel_isolated/
 /cfg/*.py
 
 # Ignore generated docs
-*.dox
 *.wikidoc
 
 # eclipse stuff
@@ -53,3 +52,4 @@ CATKIN_IGNORE
 
 .vscode
 src/CMakeLists.txt
+html/
