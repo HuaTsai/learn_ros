@@ -8,6 +8,7 @@
 int main(int argc, char **argv) {
   ros::init(argc, argv, "ndt");
   ros::NodeHandle nh;
+  ros::Rate rate(0.5);
   if (argc != 3) {
     ROS_FATAL("usage: rosrun pcl_ros_test ndt <pcd_source> <pcd_target>");
     return -1;
@@ -39,26 +40,55 @@ int main(int argc, char **argv) {
   tf::Matrix3x3 m3(tr3.getRotation());
   double r, p, y;
   m3.getRPY(r, p, y);
-  ROS_INFO("guess: %f, %f, %f, %f, %f, %f", v3.x, v3.y, v3.z, r, p, y);
+  bool run = true;
+  float eps = 0.01, step_size = 0.05, res = 1.0;
+  int max_iter = 35;
 
-  pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt;
-  ndt.setTransformationEpsilon(0.01);
-  ndt.setStepSize(0.05);
-  ndt.setResolution(1.0);
-  ndt.setMaximumIterations(35);
+  while(1) {    
+    if (nh.hasParam("epislon")) {
+      float eps_temp, step_size_temp, res_temp;
+      int max_iter_temp;
+      nh.getParam("epislon", eps_temp);
+      nh.getParam("step_size", step_size_temp);
+      nh.getParam("resolution", res_temp);
+      nh.getParam("max_iter", max_iter_temp);
+      if (eps_temp != eps || step_size_temp != step_size ||
+          res_temp != res || max_iter_temp != max_iter) {
+        eps = eps_temp;
+        step_size = step_size_temp;
+        res = res_temp;
+        max_iter = max_iter_temp;
+        run = true;
+        std::cout << eps << ", " << step_size << ", " << res << ", " << max_iter << std::endl;
+      }
+    }
+    if (run) {
+      pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt;
+      ndt.setTransformationEpsilon(eps);
+      ndt.setStepSize(step_size);
+      ndt.setResolution(res);
+      ndt.setMaximumIterations(max_iter);
 
-  ndt.setInputSource(source_pc);
-  ndt.setInputTarget(target_pc);
+      ndt.setInputSource(source_pc);
+      ndt.setInputTarget(target_pc);
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr output_pc (new pcl::PointCloud<pcl::PointXYZ>);
-  ndt.align (*output_pc, guess);
+      pcl::PointCloud<pcl::PointXYZ>::Ptr output_pc (new pcl::PointCloud<pcl::PointXYZ>);
+      
+      ROS_INFO("%ld", output_pc->size());
+      std::cout << "ndt has converged:" << std::boolalpha << ndt.hasConverged()
+                << " score: " << ndt.getFitnessScore()
+                << ", iters: " << ndt.getFinalNumIteration() << std::endl;
 
-  std::cout << "Normal Distributions Transform has converged:" << ndt.hasConverged ()
-            << " score: " << ndt.getFitnessScore () << std::endl;
+      pcl::transformPointCloud(*source_pc, *output_pc, ndt.getFinalTransformation());
+      Eigen::Matrix4f m = ndt.getFinalTransformation();
+      m3 = tf::Matrix3x3(m(0,0), m(0,1), m(0,2), m(1,0), m(1,1), m(1,2), m(2,0), m(2,1), m(2,2));
+      double r2, p2, y2;
+      m3.getRPY(r2, p2, y2);
 
-  pcl::transformPointCloud(*source_pc, *output_pc, ndt.getFinalTransformation());
-  Eigen::Matrix4f m = ndt.getFinalTransformation();
-  m3 = tf::Matrix3x3(m(0,0), m(0,1), m(0,2), m(1,0), m(1,1), m(1,2), m(2,0), m(2,1), m(2,2));
-  m3.getRPY(r, p, y);
-  ROS_INFO("ndt: %f, %f, %f, %f, %f, %f", m(0,3), m(1,3), m(2,3), r, p, y);
+      ROS_INFO("guess: %f, %f, %f, %f, %f, %f", v3.x, v3.y, v3.z, r, p, y);
+      ROS_INFO("ndt: %f, %f, %f, %f, %f, %f", m(0,3), m(1,3), m(2,3), r2, p2, y2);
+      run = false;
+    }
+    rate.sleep();
+  }
 }
