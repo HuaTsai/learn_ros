@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="transform" type="send_tf" name="send_tf" output="screen" />
+  <node pkg="transform" type="interpolate" name="interpolate" output="screen" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find transform)/rviz/rviz.rviz" />
+</launch>
