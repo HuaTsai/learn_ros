@@ -5,6 +5,7 @@
   <description>The lib_test package</description>
 
   <maintainer email="ee904@todo.todo">ee904</maintainer>
+  <author>HuaTsai</author>
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>

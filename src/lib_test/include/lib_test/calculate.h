@@ -1,5 +1,3 @@
-/** \author HuaTsai */
-
 namespace lib_test {
   /** \brief add function */
   int Add(int a, int b);
