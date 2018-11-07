@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>beginner_tutorials</name>
+  <name>pkg_name</name>
   <version>0.0.0</version>
-  <description>The beginner_tutorials package</description>
+  <description>pkg_description</description>
 
   <author email="huatsai.eed07g@nctu.edu.tw">HuaTsai</author>
   <maintainer email="huatsai.eed07g@nctu.edu.tw">HuaTsai</maintainer>
@@ -11,5 +11,4 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
   <depend>rospy</depend>
-  <depend>message_runtime</depend>
 </package>
