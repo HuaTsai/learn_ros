@@ -5,6 +5,7 @@ then
 fi
 
 mkdir -p $1/include/$1
+mkdir -p $1/src
 echo "cmake_minimum_required(VERSION 2.8.3)
 project($1)
 
